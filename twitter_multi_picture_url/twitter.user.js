@@ -15,7 +15,7 @@
 // CHECK_MOVEはgifの動画のURLを表示するかどうか
 // true:1 false:0
 var LINK_TITLE = 1;
-var LINK_NAME = "画像";
+var LINK_NAME = "URL";
 var NEW_TAB = 1;
 var CHECK_GIF = 1;
 
@@ -46,6 +46,7 @@ var CHECK_GIF = 1;
 		var tag_div = document.getElementsByTagName("div");
 		var tag_div_p ;
 		var a_tag;
+		var a_tag_f = 0;
 		if(NEW_TAB == 0)
 			a_tag = "　<a href=\"https://pbs.twimg.com/";
 		else
@@ -67,21 +68,23 @@ var CHECK_GIF = 1;
 				
 				for(var tag_div_p_num = 0; tag_div_p_num < tag_div_p.length; tag_div_p_num++){
 					if(tag_div_p[tag_div_p_num].getAttribute("class").match(/TweetTextSize--28px/i) ){
-						if(tag_meta[7].getAttribute("content") != null){
-							for(var tag_img_num = 0; tag_img_num < tag_img.length; tag_img_num++){
-								if(!tag_img[tag_img_num].match(/.mp4/i))
+						for(var tag_img_num = 0; tag_img_num < tag_img.length; tag_img_num++){
+							if(a_tag_f == 0)
+								if(!tag_img[tag_img_num].match(/.mp4/i)){
 									a_tag += "media/";
-								else
+									a_tag_f++;
+								}else{
 									a_tag += "tweet_video/";
-								if(LINK_TITLE == 0){
-									tag_div_p[tag_div_p_num].innerHTML += "<p>"+ a_tag + tag_img[tag_img_num] +"\">" + tag_img[tag_img_num].replace(/:large/i,"</a>");
+									a_tag_f++;
 								}
-								else{
-									if(tag_img.length == 1)
-										tag_div_p[tag_div_p_num].innerHTML += "<p>"+ a_tag + tag_img[tag_img_num] +"\">" + LINK_NAME + "</a>";
-									else
-										tag_div_p[tag_div_p_num].innerHTML += "<p>"+ a_tag + tag_img[tag_img_num] +"\">" + LINK_NAME + (tag_img_num + 1) + "</a>";
-								}
+							if(LINK_TITLE == 0){
+								tag_div_p[tag_div_p_num].innerHTML += "<p>"+ a_tag + tag_img[tag_img_num] +"\">" + tag_img[tag_img_num].replace(/:large/i,"</a>");
+							}
+							else{
+								if(tag_img.length == 1)
+									tag_div_p[tag_div_p_num].innerHTML += "<p>"+ a_tag + tag_img[tag_img_num] +"\">" + LINK_NAME + "</a>";
+								else
+									tag_div_p[tag_div_p_num].innerHTML += "<p>"+ a_tag + tag_img[tag_img_num] +"\">" + LINK_NAME + (tag_img_num + 1) + "</a>";
 							}
 						}
 					}
